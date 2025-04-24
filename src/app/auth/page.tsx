@@ -8,21 +8,100 @@ import Facebook from "@/components/svg/Facebook";
 import X from "@/components/svg/X";
 import Linkedin from "@/components/svg/LinkedIn";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [magicLinkEmail, setMagicLinkEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your authentication logic here
-    router.push("/platform")
-    console.log("Form submitted:", { email, password });
+    setError("");
+    
+    if (!email || !password) {
+      setError("Email and password are required");
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      
+      const response = await axios.post("/api/auth/login", {
+        email,
+        password,
+      });
+      
+      console.log("Login successful:", response.data);
+      
+      // Redirect to platform dashboard
+      router.push("/platform");
+      
+    } catch (error: any) {
+      console.error("Login error:", error);
+      
+      // Handle specific error responses from the API
+      if (error.response) {
+        setError(error.response.data.message || "Invalid credentials");
+      } else {
+        setError("Network error. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleClick = () => {
+  const handleMagicLinkSubmit = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!magicLinkEmail) {
+      setError("Email is required for magic link");
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      
+      // Send magic link email
+      const response = await axios.post("/api/auth/magic-link", {
+        email: magicLinkEmail,
+      });
+      
+      // Show success message
+      setMagicLinkSent(true);
+      
+    } catch (error: any) {
+      console.error("Magic link error:", error);
+      
+      if (error.response) {
+        setError(error.response.data.message || "Failed to send magic link");
+      } else {
+        setError("Network error. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignupClick = () => {
     router.push("/signup");
+  };
+
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      // You would implement social login logic here
+      console.log(`Logging in with ${provider}`);
+      
+      // Example: redirect to provider auth page
+      // router.push(`/api/auth/${provider}`);
+    } catch (error) {
+      console.error(`${provider} login error:`, error);
+      setError(`Failed to login with ${provider}`);
+    }
   };
 
   return (
@@ -38,32 +117,50 @@ export default function AuthPage() {
         </p>
       </div>
       <div className="min-w-md lg:min-w-lg bg-white rounded-2xl shadow-lg py-5 px-10 relative z-10">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+        
+        {magicLinkSent && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            Magic link sent! Please check your email.
+          </div>
+        )}
+        
         <div className="space-y-2 text-sm">
-          <Button className="w-full px-4 rounded-lg py-3 border-2   border-[#4F46E5]  text-[#4F46E5] ">
+          <Button 
+            className="w-full px-4 rounded-lg py-3 border-2 border-[#4F46E5] text-[#4F46E5]"
+            onClick={() => handleSocialLogin("google")}
+            disabled={loading}
+          >
             Continue with Google/Microsoft
           </Button>
           <div>
             <label
-              htmlFor="magicLogin"
+              htmlFor="magicLinkEmail"
               className="block text-sm font-medium text-[#333333] mb-2"
             >
               Magic Link login
             </label>
             <input
               type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="magicLinkEmail"
+              value={magicLinkEmail}
+              onChange={(e) => setMagicLinkEmail(e.target.value)}
               className="w-full px-4 py-3 border border-[#CCCCCC] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:border-transparent text-[#333333] placeholder-[#B3B3B3]"
               placeholder="Enter your email"
               required
             />
           </div>
           <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-700/80 to-[#B5D2FF] text-white py-3 px-4 rounded-lg hover:from-[#4338CA] hover:to-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:ring-offset-2 transition-colors font-medium"
+            type="button"
+            onClick={handleMagicLinkSubmit}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-700/80 to-[#B5D2FF] text-white py-3 px-4 rounded-lg hover:from-[#4338CA] hover:to-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:ring-offset-2 transition-colors font-medium disabled:opacity-70"
           >
-            Send magic Link
+            {loading ? "Sending..." : "Send Magic Link"}
           </button>
 
           <div className="relative">
@@ -136,9 +233,10 @@ export default function AuthPage() {
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-blue-700/80 to-[#B5D2FF] text-white py-3 px-4 rounded-lg hover:from-[#4338CA] hover:to-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:ring-offset-2 transition-colors font-medium"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-700/80 to-[#B5D2FF] text-white py-3 px-4 rounded-lg hover:from-[#4338CA] hover:to-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-[#4F46E5] focus:ring-offset-2 transition-colors font-medium disabled:opacity-70"
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </button>
 
           <div className="relative">
@@ -151,16 +249,32 @@ export default function AuthPage() {
           </div>
 
           <div className="container inline-flex  items-center justify-center gap-4 ">
-            <button className="flex items-center justify-center size-12     rounded-full hover:bg-[#E5E5E5] transition-colors">
+            <button 
+              type="button" 
+              className="flex items-center justify-center size-12 rounded-full hover:bg-[#E5E5E5] transition-colors"
+              onClick={() => handleSocialLogin("google")}
+            >
               <Google />
             </button>
-            <button className="flex items-center justify-center size-12   rounded-full hover:bg-[#E5E5E5] transition-colors">
+            <button 
+              type="button" 
+              className="flex items-center justify-center size-12 rounded-full hover:bg-[#E5E5E5] transition-colors"
+              onClick={() => handleSocialLogin("facebook")}
+            >
               <Facebook />
             </button>
-            <button className="flex items-center justify-center size-12   rounded-full hover:bg-[#E5E5E5] transition-colors">
+            <button 
+              type="button" 
+              className="flex items-center justify-center size-12 rounded-full hover:bg-[#E5E5E5] transition-colors"
+              onClick={() => handleSocialLogin("twitter")}
+            >
               <X />
             </button>
-            <button className="flex items-center justify-center size-12   rounded-full hover:bg-[#E5E5E5] transition-colors">
+            <button 
+              type="button" 
+              className="flex items-center justify-center size-12 rounded-full hover:bg-[#E5E5E5] transition-colors"
+              onClick={() => handleSocialLogin("linkedin")}
+            >
               <Linkedin />
             </button>
           </div>
@@ -169,8 +283,9 @@ export default function AuthPage() {
             <p className="text-sm text-[#666666]">
               Don't have an account?{" "}
               <button
+                type="button"
                 className="text-[#4F46E5] hover:text-[#4338CA]"
-                onClick={handleClick}
+                onClick={handleSignupClick}
               >
                 Sign up
               </button>

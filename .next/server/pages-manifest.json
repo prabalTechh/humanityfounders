@@ -1,0 +1,14 @@
+{
+  "/AiAgent": "pages/AiAgent.html",
+  "/AiAssistant": "pages/AiAssistant.html",
+  "/Campaign": "pages/Campaign.html",
+  "/Dashboard": "pages/Dashboard.html",
+  "/Leads": "pages/Leads.html",
+  "/Platformsetup": "pages/Platformsetup.html",
+  "/Payouts": "pages/Payouts.html",
+  "/_app": "pages/_app.js",
+  "/Promoters": "pages/Promoters.html",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
+}

@@ -1,0 +1,10 @@
+{
+  "/api/auth/signup/route": "/api/auth/signup",
+  "/api/auth/login/route": "/api/auth/login",
+  "/favicon.ico/route": "/favicon.ico",
+  "/api/auth/logout/route": "/api/auth/logout",
+  "/_not-found/page": "/_not-found",
+  "/signup/page": "/signup",
+  "/page": "/",
+  "/platform/page": "/platform"
+}

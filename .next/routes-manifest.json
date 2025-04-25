@@ -1,0 +1,115 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/AiAgent",
+      "regex": "^/AiAgent(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/AiAgent(?:/)?$"
+    },
+    {
+      "page": "/AiAssistant",
+      "regex": "^/AiAssistant(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/AiAssistant(?:/)?$"
+    },
+    {
+      "page": "/Campaign",
+      "regex": "^/Campaign(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/Campaign(?:/)?$"
+    },
+    {
+      "page": "/Dashboard",
+      "regex": "^/Dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/Dashboard(?:/)?$"
+    },
+    {
+      "page": "/Leads",
+      "regex": "^/Leads(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/Leads(?:/)?$"
+    },
+    {
+      "page": "/Payouts",
+      "regex": "^/Payouts(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/Payouts(?:/)?$"
+    },
+    {
+      "page": "/Platformsetup",
+      "regex": "^/Platformsetup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/Platformsetup(?:/)?$"
+    },
+    {
+      "page": "/Promoters",
+      "regex": "^/Promoters(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/Promoters(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/platform",
+      "regex": "^/platform(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/platform(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "RSC",
+    "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+    "prefetchHeader": "Next-Router-Prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  },
+  "rewrites": []
+}

@@ -1,14 +1,10 @@
 {
-  "name": "humanityfounders",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
   "dependencies": {
+<<<<<<< HEAD
+    "@types/mongoose": "^5.11.96",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.13.3"
+=======
     "@prisma/client": "^6.6.0",
     "@prisma/extension-optimize": "^1.1.8",
     "@types/axios": "^0.9.36",
@@ -34,5 +30,6 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
+>>>>>>> da73a3f129febff45eaa9431953bc089b830992c
   }
 }

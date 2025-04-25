@@ -1,6 +1,7 @@
 // app/api/auth/signup/route.ts
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/db";
+import connectDB from "../../../lib/db";
+import User from "../../../lib/model/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -30,6 +31,9 @@ const generateToken = (userId: string) => {
 
 export async function POST(request: Request) {
   try {
+    // Connect to MongoDB
+    await connectDB();
+    
     const body = await request.json();
     const { email, password } = body;
 
@@ -58,9 +62,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user already exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return NextResponse.json(
@@ -73,29 +75,29 @@ export async function POST(request: Request) {
     const hashedPassword = await hashPassword(password);
 
     // Create new user in the database
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
+    const newUser = await User.create({
+      email,
+      password: hashedPassword,
     });
 
     // Generate JWT token
-    const token = generateToken(newUser.id);
+    //@ts-ignore
+    const token = generateToken(newUser._id.toString());
     
     // Create the response
     const response = NextResponse.json({ 
       message: "User created successfully", 
       user: {
-        id: newUser.id,
+        //@ts-ignore
+        id: newUser._id.toString(),
         email: newUser.email
       }
     }, { status: 201 });
     
     // Set the authentication cookie
     (await
-          // Set the authentication cookie
-          cookies()).set({
+      // Set the authentication cookie
+      cookies()).set({
       name: "auth_token",
       value: token,
       httpOnly: true,
@@ -110,8 +112,8 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("Error creating user:", error);
     
-    // Check for specific Prisma errors
-    if (error.code === "P2002") {
+    // Check for MongoDB duplicate key error
+    if (error.code === 11000) {
       return NextResponse.json(
         { message: "User with this email already exists" },
         { status: 409 }

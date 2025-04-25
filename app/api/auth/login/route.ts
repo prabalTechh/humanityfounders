@@ -1,6 +1,7 @@
 // app/api/auth/login/route.ts
 import { NextResponse } from "next/server";
-import prisma from "../../../lib/db";
+import connectDB from "../../../lib/db";
+import User from "../../../lib/model/user";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -18,6 +19,9 @@ const generateToken = (userId: string) => {
 
 export async function POST(request: Request) {
   try {
+    // Connect to MongoDB
+    await connectDB();
+    
     const body = await request.json();
     const { email, password } = body;
     
@@ -30,9 +34,7 @@ export async function POST(request: Request) {
     }
     
     // Find the user
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await User.findOne({ email });
     
     // Check if user exists
     if (!user || !user.password) {
@@ -52,21 +54,23 @@ export async function POST(request: Request) {
     }
     
     // Generate JWT token
-    const token = generateToken(user.id);
+    //@ts-ignore
+    const token = generateToken(user._id.toString());
     
     // Create the response
     const response = NextResponse.json({
       message: "Login successful",
       user: {
-        id: user.id,
+        //@ts-ignore
+        id: user._id.toString(),
         email: user.email
       }
     });
     
     // Set the authentication cookie
     (await
-          // Set the authentication cookie
-          cookies()).set({
+      // Set the authentication cookie
+      cookies()).set({
       name: "auth_token",
       value: token,
       httpOnly: true,

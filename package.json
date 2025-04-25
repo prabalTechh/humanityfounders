@@ -1,7 +1,35 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@types/mongoose": "^5.11.96",
     "mongodb": "^6.16.0",
     "mongoose": "^8.13.3"
+=======
+    "@prisma/client": "^6.6.0",
+    "@prisma/extension-optimize": "^1.1.8",
+    "@types/axios": "^0.9.36",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.9",
+    "axios": "^1.9.0",
+    "bcryptjs": "^3.0.2",
+    "framer-motion": "^12.7.4",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.501.0",
+    "next": "15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss-font-inter": "^4.0.0"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.110.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20.17.30",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "prisma": "^6.6.0",
+    "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+>>>>>>> da73a3f129febff45eaa9431953bc089b830992c
   }
 }
